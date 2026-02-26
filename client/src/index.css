@@ -1,0 +1,6 @@
+/** @format */
+@import "tailwindcss";
+.App {
+	height: 100vh;
+	width: 100vw;
+}
