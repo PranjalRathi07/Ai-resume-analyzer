@@ -2,11 +2,13 @@
 
 import {
 	ChevronUp,
-	CircleFadingPlus,
+	GraduationCap,
 	Menu,
-	MessageCircle,
-	Phone,
+	FileSpreadsheet,
+	LayoutDashboard,
+	Puzzle,
 	Settings,
+	ChartNoAxesCombined,
 	User2,
 } from "lucide-react";
 
@@ -20,7 +22,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarFooter,
-} from "@/components/sidebar";
+} from "@/components/ui/sidebar";
 
 import { useSidebar } from "@/components/ui/sidebar-context";
 import {
@@ -33,19 +35,29 @@ import {
 export function AppSidebar() {
 	const items = [
 		{
-			title: "Messages",
+			title: "Dashboard",
 			url: "#",
-			icon: MessageCircle,
+			icon: LayoutDashboard,
 		},
 		{
-			title: "Phone",
+			title: "Resume Score",
 			url: "#",
-			icon: Phone,
+			icon: FileSpreadsheet,
 		},
 		{
-			title: "Status",
+			title: "Skill Gap",
 			url: "#",
-			icon: CircleFadingPlus,
+			icon: Puzzle,
+		},
+		{
+			title: "Career Path",
+			url: "#",
+			icon: ChartNoAxesCombined,
+		},
+		{
+			title: "Learning Path",
+			url: "#",
+			icon: GraduationCap,
 		},
 	];
 	const { toggleSidebar } = useSidebar();
@@ -53,7 +65,7 @@ export function AppSidebar() {
 		<Sidebar variant='floating' collapsible='icon'>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Ai Resume Analyzer</SidebarGroupLabel>
+					<SidebarGroupLabel>Menu</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
@@ -90,19 +102,13 @@ export function AppSidebar() {
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<SidebarMenuButton>
-									<User2 /> Manoj Ravi
+									<User2 /> Pranjal Rathi
 									<ChevronUp className='ml-auto' />
 								</SidebarMenuButton>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent
 								side='top'
 								className='w-[--radix-popper-anchor-width]'>
-								<DropdownMenuItem>
-									<a href='https://github.com/rayimanoj8/'>Account</a>
-								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<span>Back Up</span>
-								</DropdownMenuItem>
 								<DropdownMenuItem>
 									<span>Sign out</span>
 								</DropdownMenuItem>
