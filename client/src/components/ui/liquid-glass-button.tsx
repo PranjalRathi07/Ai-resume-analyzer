@@ -182,13 +182,23 @@ const colorVariants: Record<
 };
 
 const metalButtonVariants = (
-	variant: ColorVariant = "default",
 	isPressed: boolean,
 	isHovered: boolean,
 	isTouchDevice: boolean,
+	variant: ColorVariant = "default",
 ) => {
 	const colors = colorVariants[variant];
 	const transitionStyle = "all 250ms cubic-bezier(0.1, 0.4, 0.2, 1)";
+
+	let boxShadow;
+
+	if (isPressed) {
+		boxShadow = "0 1px 2px rgba(0, 0, 0, 0.15)";
+	} else if (isHovered && !isTouchDevice) {
+		boxShadow = "0 4px 12px rgba(0, 0, 0, 0.12)";
+	} else {
+		boxShadow = "0 3px 8px rgba(0, 0, 0, 0.08)";
+	}
 
 	return {
 		wrapper: cn(
@@ -199,11 +209,7 @@ const metalButtonVariants = (
 			transform: isPressed
 				? "translateY(2.5px) scale(0.99)"
 				: "translateY(0) scale(1)",
-			boxShadow: isPressed
-				? "0 1px 2px rgba(0, 0, 0, 0.15)"
-				: isHovered && !isTouchDevice
-					? "0 4px 12px rgba(0, 0, 0, 0.12)"
-					: "0 3px 8px rgba(0, 0, 0, 0.08)",
+			boxShadow: boxShadow,
 			transition: transitionStyle,
 			transformOrigin: "center center",
 		},
@@ -261,10 +267,10 @@ export const MetalButton = React.forwardRef<
 
 	const buttonText = children || "Button";
 	const variants = metalButtonVariants(
-		variant,
 		isPressed,
 		isHovered,
 		isTouchDevice,
+		variant,
 	);
 
 	const handleInternalMouseDown = () => {
