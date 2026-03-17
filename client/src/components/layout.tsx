@@ -1,42 +1,36 @@
 /** @format */
+import { Outlet } from "react-router-dom";
 import { AppSidebar } from "./whatsapp-sidebar";
 import { SidebarProvider } from "./ui/sidebar";
 import { useSidebar } from "./ui/sidebar-context";
 import { Header } from "./navbar";
-import Home from "./home-content";
-import Dashboard from "./dashbord";
 
-const PageContent = () => {
+const LayoutContent = () => {
 	const { open } = useSidebar();
 
 	return (
 		<div
-			className='flex flex-col flex-1 transition-all duration-200 ease-in-out'
+			className='flex flex-col flex-1 transition-all duration-200 ease-linear'
 			style={{ marginLeft: open ? "12rem" : "2rem" }}>
-			{/* Navbar */}
 			<nav className='bg-transparent flex items-center justify-between px-8'>
 				<Header />
 			</nav>
-
-			{/* White Content Div */}
 			<main className='flex-1 text-slate-100 rounded-tl-3xl p-8 mt-24'>
-				<Home />
-				<Dashboard />
+				<Outlet />
 			</main>
 		</div>
 	);
 };
 
-const FrontPage = () => {
+const Layout = () => {
 	return (
 		<SidebarProvider>
 			<div className='flex h-screen w-full'>
-
 				<AppSidebar />
-				<PageContent />
+				<LayoutContent />
 			</div>
 		</SidebarProvider>
 	);
 };
 
-export default FrontPage;
+export default Layout;

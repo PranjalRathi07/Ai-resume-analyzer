@@ -4,13 +4,13 @@ import {
 	ChevronUp,
 	GraduationCap,
 	Menu,
-	FileSpreadsheet,
 	LayoutDashboard,
-	Puzzle,
 	Settings,
+	Mails,
 	ChartNoAxesCombined,
 	User2,
 } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
 
 import {
 	Sidebar,
@@ -36,31 +36,27 @@ export function AppSidebar() {
 	const items = [
 		{
 			title: "Dashboard",
-			url: "#",
+			url: "/dashboard",
 			icon: LayoutDashboard,
 		},
 		{
-			title: "Resume Score",
-			url: "#",
-			icon: FileSpreadsheet,
-		},
-		{
-			title: "Skill Gap",
-			url: "#",
-			icon: Puzzle,
-		},
-		{
 			title: "Career Path",
-			url: "#",
+			url: "/career",
 			icon: ChartNoAxesCombined,
 		},
 		{
 			title: "Learning Path",
-			url: "#",
+			url: "/learning",
 			icon: GraduationCap,
+		},
+		{
+			title: "Cover Letter",
+			url: "/cover-letter",
+			icon: Mails,
 		},
 	];
 	const { toggleSidebar } = useSidebar();
+	const location = useLocation();
 	return (
 		<Sidebar variant='floating' collapsible='icon'>
 			<SidebarContent>
@@ -77,16 +73,24 @@ export function AppSidebar() {
 							</SidebarMenuItem>
 						</SidebarMenu>
 						<SidebarMenu>
-							{items.map((item) => (
-								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton asChild>
-										<a href={item.url}>
-											<item.icon />
-											<span>{item.title}</span>
-										</a>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
+							{items.map((item) => {
+								const active = location.pathname === item.url;
+								return (
+									<SidebarMenuItem key={item.title}>
+										<NavLink to={item.url} style={{ textDecoration: "none" }}>
+											<SidebarMenuButton
+												style={
+													active
+														? { backgroundColor: "white", color: "black", fontWeight: 500 }
+														: {}
+												}>
+												<item.icon />
+												<span>{item.title}</span>
+											</SidebarMenuButton>
+										</NavLink>
+									</SidebarMenuItem>
+								);
+							})}
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
@@ -120,3 +124,4 @@ export function AppSidebar() {
 		</Sidebar>
 	);
 }
+
