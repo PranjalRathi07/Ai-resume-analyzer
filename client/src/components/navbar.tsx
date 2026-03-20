@@ -22,11 +22,9 @@ export const Header = () => {
 		<header>
 			<nav
 				data-state={menuState && "active"}
-				className='fixed left-10 w-full z-20 '>
+				className='fixed w-11/12 rounded-b-2xl shadow-2xl backdrop-blur-3xl z-50'>
 				<div
-					className={cn(
-						"mx-auto mt-2 max-w-7xl px-6 transition-all duration-300 lg:px-12",
-					)}>
+					className={cn("max-w-7xl px-6 transition-all duration-300 lg:px-5")}>
 					<div className='relative flex flex-wrap items-center justify-between gap-6 lg:gap-0 py-2'>
 						<div className='flex w-full justify-between lg:w-auto'>
 							<Link

@@ -4,7 +4,7 @@ import dasbordimg from "../assets/homimage.png";
 
 const HomeContent = () => {
 	return (
-		<div className='max-w-6xl mx-auto text-5xl font-bold mt-20'>
+		<div className='max-w-6xl mx- text-5xl font-bold mt-15'>
 			<h1>
 				Get Expert Feedback on <br /> Your{" "}
 				<span className='leading-12 tracking-tighter bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent'>
@@ -14,9 +14,9 @@ const HomeContent = () => {
 			</h1>
 
 			<p className='text-base mt-7 text-slate-400'>
-				Our free AI-powered resume analyzer provides instant <br />{" "}
-				feedback on your resume's strengths and weaknesses, <br /> helping
-				you optimize it for success. <br />
+				Our free AI-powered resume analyzer provides instant <br /> feedback on
+				your resume's strengths and weaknesses, <br /> helping you optimize it
+				for success. <br />
 				Try it now and take the first step towards landing your dream job!
 			</p>
 			<ImageUpload />

@@ -10,12 +10,12 @@ const LayoutContent = () => {
 
 	return (
 		<div
-			className='flex flex-col flex-1 transition-all duration-200 ease-linear'
-			style={{ marginLeft: open ? "12rem" : "2rem" }}>
-			<nav className='bg-transparent flex items-center justify-between px-8'>
+			className='flex flex-col flex-1 min-h-screen transition-all duration-200 ease-linear'
+			style={{ marginLeft: open ? "12rem" : "1rem" }}>
+			<nav className='flex items-center justify-between px-8'>
 				<Header />
 			</nav>
-			<main className='flex-1 text-slate-100 rounded-tl-3xl p-8 mt-24'>
+			<main className='flex-1 text-slate-100 rounded-tl-3xl p-8 mt-24 mx-4'>
 				<Outlet />
 			</main>
 		</div>
@@ -25,7 +25,7 @@ const LayoutContent = () => {
 const Layout = () => {
 	return (
 		<SidebarProvider>
-			<div className='flex h-screen w-full'>
+			<div className='flex  w-full'>
 				<AppSidebar />
 				<LayoutContent />
 			</div>

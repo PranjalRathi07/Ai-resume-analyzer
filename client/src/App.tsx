@@ -7,12 +7,12 @@ import "./App.css";
 
 function App() {
 	return (
-		<div className='App bg-linear-to-br min-h-screen from-slate-900 via-slate-800 to-slate-900'>
+		<div className='App h-dvh overflow-y-auto bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 scroll-smooth'>
 			<Routes>
-				<Route element={<Layout />}>
+					<Route element={<Layout />}>
 					<Route path='/' element={<HomeContent />} />
 					<Route path='/dashboard' element={<Dashboard />} />
-				</Route>
+					</Route>
 			</Routes>
 		</div>
 	);

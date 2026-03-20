@@ -18,8 +18,8 @@ const PageContent = () => {
 				<Header />
 			</nav>
 
-			{/* White Content Div */}
-			<main className='flex-1 text-slate-100 rounded-tl-3xl p-8 mt-24'>
+			{/* Content Div */}
+			<main className='flex-1 text-slate-100 rounded-tl-3xl p-8 mt-24 '>
 				<Home />
 				<Dashboard />
 			</main>
@@ -30,8 +30,7 @@ const PageContent = () => {
 const FrontPage = () => {
 	return (
 		<SidebarProvider>
-			<div className='flex h-screen w-full'>
-
+			<div className='flex w-full'>
 				<AppSidebar />
 				<PageContent />
 			</div>
