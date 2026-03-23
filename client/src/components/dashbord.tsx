@@ -16,7 +16,7 @@ const Dashboard = () => {
 				scale={1}
 				threshold={0.1}
 				delay={0.1}>
-				<div className='bg-sidebar rounded-lg shadow-2xl p-5 font-bold text-2xl border-2 border-gray-800 h-full'>
+				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl p-5 font-bold text-2xl h-full'>
 					<h1 className='pb-7 text-4xl'>
 						{" "}
 						<span className='bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent'>
@@ -24,7 +24,7 @@ const Dashboard = () => {
 						</span>{" "}
 						<span className='text-2xl'>/100</span>
 					</h1>
-					<div className='w-full h-[85%] bg-gray-300 rounded-lg shadow-2xl'></div>
+					<div className='w-full h-[90%] bg-gray-300 rounded-lg shadow-2xl'></div>
 				</div>
 			</AnimatedContent>
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
 				scale={1}
 				threshold={0.1}
 				delay={0.2}>
-				<div className='bg-sidebar rounded-lg shadow-2xl p-5 font-bold text-2xl border-2 border-gray-800 h-full'>
+				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl p-5 font-bold text-2xl h-full'>
 					<h1 className='pb-3'>Skill, Section & Keyword Gap</h1>
 					<div className='w-full h-[85%] bg-gray-300 rounded-lg shadow-2xl'></div>
 				</div>
@@ -58,8 +58,8 @@ const Dashboard = () => {
 				scale={1}
 				threshold={0.1}
 				delay={0.3}>
-				<div className='bg-sidebar rounded-lg shadow-2xl p-5 font-bold text-2xl border-2 border-gray-800 h-full'>
-					<h1 className='pb-3'>Carrear Path & Job Suggestion</h1>
+				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl p-5 font-bold text-2xl h-full'>
+					<h1 className='pb-3'>Career Path & Job Suggestion</h1>
 					<div className='w-full h-[75%] bg-gray-300 rounded-lg shadow-2xl'></div>
 				</div>
 			</AnimatedContent>
@@ -76,7 +76,7 @@ const Dashboard = () => {
 				scale={1}
 				threshold={0.1}
 				delay={0.4}>
-				<div className='bg-sidebar rounded-lg shadow-2xl p-5 font-bold text-2xl border-2 border-gray-800 h-full'>
+				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl p-5 font-bold text-2xl h-full'>
 					<h1 className='pb-3'>Learning Path & Course Suggestion</h1>
 					<div className='w-full h-[80%] bg-gray-300 rounded-lg shadow-2xl'></div>
 				</div>

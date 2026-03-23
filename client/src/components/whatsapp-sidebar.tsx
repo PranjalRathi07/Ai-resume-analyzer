@@ -41,12 +41,12 @@ export function AppSidebar() {
 		},
 		{
 			title: "Career Path",
-			url: "/career",
+			url: "/career-path",
 			icon: ChartNoAxesCombined,
 		},
 		{
 			title: "Learning Path",
-			url: "/learning",
+			url: "/Learning-path",
 			icon: GraduationCap,
 		},
 		{
@@ -81,7 +81,11 @@ export function AppSidebar() {
 											<SidebarMenuButton
 												style={
 													active
-														? { backgroundColor: "white", color: "black", fontWeight: 500 }
+														? {
+																backgroundColor: "white",
+																color: "black",
+																fontWeight: 500,
+															}
 														: {}
 												}>
 												<item.icon />
@@ -124,4 +128,3 @@ export function AppSidebar() {
 		</Sidebar>
 	);
 }
-
