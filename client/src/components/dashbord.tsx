@@ -7,6 +7,20 @@ import { useState, useEffect } from "react";
 const Dashboard = () => {
 	const targetScore = 50;
 	const [Value, setValue] = useState(0);
+	const [Progress, setProgress] = useState(0);
+
+	useEffect(() => {
+		let Interval = setInterval(() => {
+			setProgress((prev) => {
+				if (prev >= 50) {
+					clearInterval(Interval);
+					return 50;
+				}
+				return prev + 1;
+			});
+		}, 30);
+		return () => clearInterval(Interval);
+	}, []);
 
 	useEffect(() => {
 		const duration = 1400;
@@ -85,7 +99,15 @@ const Dashboard = () => {
 				threshold={0.1}
 				delay={0}>
 				<div className='bg-white/5 border border-white/10 p-5 rounded-xl transition-all hover:bg-white/10 font-bold text-2xl h-full'>
-					<h1 className='pb-3'>Skill, Section & Keyword Gap</h1>
+					<h1 className='pb-4 text-3xl flex flex-row justify-between'>
+						<span>Skill, Section & Keyword Gap</span>{" "}
+						<div className='mt-3 relative w-60 h-3	 bg-white/10 rounded-full'>
+							<div
+								className='h-full bg-purple-500 transition-all duration-300 rounded-full'
+								style={{ width: `${Progress}%` }}
+							/>
+						</div>
+					</h1>
 					<div className='w-full h-[85%] bg-black/20 p-3 rounded-lg border border-white/5'></div>
 				</div>
 			</AnimatedContent>
