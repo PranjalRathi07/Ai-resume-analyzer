@@ -1,16 +1,16 @@
 /** @format */
 
+import { useState, useEffect } from "react";
 import {
 	ChevronUp,
 	GraduationCap,
 	Menu,
 	LayoutDashboard,
-	Settings,
 	Mails,
 	ChartNoAxesCombined,
 	User2,
 } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import {
 	Sidebar,
@@ -33,6 +33,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function AppSidebar() {
+	const [userName, setUserName] = useState<string | null>(null);
+
+	useEffect(() => {
+		const loadUser = () => {
+			const stored = localStorage.getItem("user");
+			if (stored) {
+				try {
+					const parsed = JSON.parse(stored);
+					setUserName(parsed.name || null);
+				} catch {
+					setUserName(null);
+				}
+			} else {
+				setUserName(null);
+			}
+		};
+
+		loadUser();
+		window.addEventListener("storage", loadUser);
+		return () => window.removeEventListener("storage", loadUser);
+	}, []);
+
 	const items = [
 		{
 			title: "Dashboard",
@@ -57,6 +79,13 @@ export function AppSidebar() {
 	];
 	const { toggleSidebar } = useSidebar();
 	const location = useLocation();
+	const navigate = useNavigate();
+
+	const handleSignOut = () => {
+		localStorage.removeItem("user");
+		window.dispatchEvent(new Event("storage"));
+		navigate("/");
+	};
 	return (
 		<Sidebar variant='floating' collapsible='icon'>
 			<SidebarContent>
@@ -99,25 +128,21 @@ export function AppSidebar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
+			{userName && (
 			<SidebarFooter>
 				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton>
-							<Settings /> Settings
-						</SidebarMenuButton>
-					</SidebarMenuItem>
 					<SidebarMenuItem>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<SidebarMenuButton>
-									<User2 /> Pranjal Rathi
+									<User2 /> {userName}
 									<ChevronUp className='ml-auto' />
 								</SidebarMenuButton>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent
 								side='top'
 								className='w-[--radix-popper-anchor-width]'>
-								<DropdownMenuItem>
+								<DropdownMenuItem onClick={handleSignOut}>
 									<span>Sign out</span>
 								</DropdownMenuItem>
 							</DropdownMenuContent>
@@ -125,6 +150,7 @@ export function AppSidebar() {
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>
+			)}
 		</Sidebar>
 	);
 }

@@ -404,7 +404,7 @@ const Learning_path = () => {
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0, y: -20 }}
 			transition={{ duration: 0.4 }}>
-			<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col shadow-lg h-min-[calc(100vh-11rem)]'>
+			<div className='border-white/10 bg-linear-to-br from-slate-800/90 to-slate-900/95 p-5 sm:p-6 backdrop-blur-md rounded-2xl flex flex-col shadow-lg h-min-[calc(100vh-11rem)]'>
 				<h1 className='text-center text-2xl font-bold mb-6 underline bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent shrink-0'>
 					🧠 COMPLETE MERN STACK LEARNING PATH
 				</h1>

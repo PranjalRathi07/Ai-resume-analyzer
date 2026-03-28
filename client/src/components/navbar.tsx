@@ -12,8 +12,13 @@ export const Header = () => {
 	const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
 	React.useEffect(() => {
-		const user = localStorage.getItem("user");
-		setIsLoggedIn(!!user);
+		const checkAuth = () => {
+			const user = localStorage.getItem("user");
+			setIsLoggedIn(!!user);
+		};
+		checkAuth();
+		window.addEventListener("storage", checkAuth);
+		return () => window.removeEventListener("storage", checkAuth);
 	}, []);
 
 	return (

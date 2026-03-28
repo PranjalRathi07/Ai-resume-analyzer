@@ -129,7 +129,7 @@ const CareerPath = () => {
 			transition={{ duration: 0.4 }}>
 			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4 h-[calc(100vh-11rem)] rounded-2xl'>
 				{/* Career Path Section */}
-				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col shadow-lg overflow-hidden'>
+				<div className='border-white/10 bg-linear-to-br from-slate-800/90 to-slate-900/95 p-5 sm:p-6 backdrop-blur-md rounded-2xl flex flex-col shadow-lg overflow-hidden'>
 					<h1 className='text-center text-2xl font-bold mb-6 underline bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent shrink-0'>
 						Career Path
 					</h1>
@@ -203,7 +203,7 @@ const CareerPath = () => {
 				</div>
 
 				{/* Job Suggestion Section */}
-				<div className='bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col shadow-lg overflow-hidden'>
+				<div className='border-white/10 bg-linear-to-br from-slate-800/90 to-slate-900/95 p-5 sm:p-6 backdrop-blur-md rounded-2xl flex flex-col shadow-lg overflow-hidden'>
 					<h1 className='text-center text-2xl font-bold mb-6 underline bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent shrink-0'>
 						Job Suggestion
 					</h1>

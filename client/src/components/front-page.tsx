@@ -7,6 +7,7 @@ import Home from "./home-content";
 import Dashboard from "./dashbord";
 import CareerPath from "./Career-path";
 import Learning_path from "./Learning_path";
+import CoverLetter from "./Cover_letter";
 
 const PageContent = () => {
 	const { open } = useSidebar();
@@ -26,6 +27,7 @@ const PageContent = () => {
 				<Dashboard />
 				<CareerPath />
 				<Learning_path />
+				<CoverLetter />
 			</main>
 		</div>
 	);

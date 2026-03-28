@@ -7,6 +7,7 @@ import Dashboard from "./components/dashbord";
 import CareerPath from "./components/Career-path";
 import LearningPath from "./components/Learning_path";
 import LoginPage from "./components/Login_page";
+import CoverLetter from "./components/Cover_letter";
 import "./App.css";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 						<Route path='/dashboard' element={<Dashboard />} />
 						<Route path='/career-path' element={<CareerPath />} />
 						<Route path='/learning-path' element={<LearningPath />} />
+						<Route path='/cover-letter' element={<CoverLetter />} />
 					</Route>
 				</Routes>
 			</AnimatePresence>

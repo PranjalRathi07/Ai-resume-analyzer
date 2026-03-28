@@ -54,7 +54,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
 		if (!el) return;
 
 		let scrollerTarget: Element | string | null =
-			container || document.getElementById("snap-main-container") || null;
+			container || document.getElementById("snap-main-container") || document.querySelector(".App") || null;
 
 		if (typeof scrollerTarget === "string") {
 			scrollerTarget = document.querySelector(scrollerTarget);
