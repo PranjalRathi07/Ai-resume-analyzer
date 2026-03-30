@@ -1,27 +1,126 @@
 /** @format */
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+	FileText,
+	Loader2,
+	Sparkles,
+	AlertCircle,
+	Copy,
+	Check,
+	Download,
+} from "lucide-react";
 
-const coverLetterData = {
-	subject: "Application for Web Developer Position",
-	salutation: "Dear Hiring Manager,",
-	paragraphs: [
-		"I am writing to express my interest in the Web Developer position at your esteemed organization. I am currently pursuing a Bachelor of Computer Applications from G.L. Bajaj Institute of Management, Greater Noida, and have gained hands-on experience through multiple internships and projects in full-stack web development.",
-		"During my internship at Acmegrade, I worked extensively with React and Node.js, where I developed new features and optimized dashboard performance, reducing load time by 25%. I also contributed reusable components to the company’s design system, which enhanced development efficiency. My experience at Codtech IT Solutions and Prodigy InfoTech further strengthened my skills in responsive design, API integration, and real-world project development.",
-		"One of my key projects, the Online Complaint Management System, demonstrates my ability to build scalable web applications. I used technologies such as ReactJS, Node.js, MongoDB, and SendGrid to create a platform that allows users to submit complaints and enables administrators to manage and resolve them effectively.",
-		"I am proficient in JavaScript (React.js), HTML/CSS (TailwindCSS, Bootstrap), MongoDB, and have a solid foundation in Data Structures and Algorithms. I am also experienced with Git, GitHub, and modern development tools, and I enjoy working in Agile environments.",
-		"I am eager to contribute my technical skills, problem-solving abilities, and passion for development to your team. I would welcome the opportunity to discuss how I can add value to your organization.",
-		"Thank you for your time and consideration.",
-	],
-	signOff: "Sincerely,",
-	signature: {
-		name: "Pranjal Rathi",
-		phone: "7302368443",
-		email: "rathipranjal123@gmail.com",
-		linkedin: "https://www.linkedin.com/in/pranjal-rathi-07",
-	},
-};
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface Signature {
+	name: string;
+	email: string;
+	phone?: string;
+	linkedin?: string;
+}
+interface CoverLetterData {
+	subject: string;
+	salutation: string;
+	paragraphs: string[];
+	signOff: string;
+	signature: Signature;
+}
 
+// ── Empty state ────────────────────────────────────────────────────────────────
+const EmptyState = () => (
+	<div className='flex flex-col items-center justify-center gap-4 py-16 text-center flex-1'>
+		<div className='flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5'>
+			<FileText size={24} className='text-orange-400' />
+		</div>
+		<div>
+			<h3 className='text-base font-bold text-white mb-1'>No Resume Analyzed Yet</h3>
+			<p className='text-slate-400 text-sm max-w-xs'>
+				Upload your resume on the home page to get an AI-generated cover letter personalized to your experience.
+			</p>
+		</div>
+		<Link
+			to='/'
+			className='flex items-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-pink-600 px-4 py-2 text-sm font-semibold text-white hover:from-orange-500 hover:to-pink-500 transition'>
+			<Sparkles size={14} /> Analyze My Resume
+		</Link>
+	</div>
+);
+
+// ── Main component ─────────────────────────────────────────────────────────────
 const CoverLetter = () => {
+	const [data, setData] = useState<CoverLetterData | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [noResume, setNoResume] = useState(false);
+	const [copied, setCopied] = useState(false);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const token = localStorage.getItem("token");
+			const hasLocalAnalysis = localStorage.getItem("resumeAnalysis");
+			if (!token || !hasLocalAnalysis) { setNoResume(true); setLoading(false); return; }
+			try {
+				const res = await fetch("http://localhost:5000/api/content/cover-letter", {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				if (res.status === 404) { setNoResume(true); setLoading(false); return; }
+				const json = await res.json();
+				if (!res.ok) throw new Error(json.message || "Failed to load");
+				setData(json);
+			} catch (e: unknown) {
+				setError(e instanceof Error ? e.message : "Failed to load");
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchData();
+	}, []);
+
+	const handleCopy = () => {
+		if (!data) return;
+		const text = [
+			`Subject: ${data.subject}`,
+			"",
+			data.salutation,
+			"",
+			...data.paragraphs,
+			"",
+			data.signOff,
+			data.signature.name,
+			data.signature.email,
+			data.signature.phone ?? "",
+			data.signature.linkedin ?? "",
+		].join("\n");
+		navigator.clipboard.writeText(text);
+		setCopied(true);
+		setTimeout(() => setCopied(false), 2000);
+	};
+
+	const handleDownload = () => {
+		if (!data) return;
+		const text = [
+			`Subject: ${data.subject}`,
+			"",
+			data.salutation,
+			"",
+			...data.paragraphs,
+			"",
+			data.signOff,
+			data.signature.name,
+			data.signature.email,
+			data.signature.phone ?? "",
+			data.signature.linkedin ?? "",
+		].join("\n");
+		const blob = new Blob([text], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = "cover-letter.txt";
+		a.click();
+		URL.revokeObjectURL(url);
+	};
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
@@ -29,72 +128,117 @@ const CoverLetter = () => {
 			exit={{ opacity: 0, y: -20 }}
 			transition={{ duration: 0.4 }}
 			className='h-min-[calc(100vh-11rem)] w-full max-w-5xl mx-auto'>
-			<div className='border-white/10 bg-linear-to-br from-slate-800/90 to-slate-900/95 p-5 sm:p-6 backdrop-blur-md rounded-2xl md:p-8 lg:p-10 flex flex-col shadow-lg h-full'>
-				<h1 className='text-center text-2xl md:text-3xl font-bold mb-6 underline bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent shrink-0'>
-					Cover Letter
-				</h1>
-
-				<div className='flex-1 min-h-0 h-full pr-2 md:pr-4 no-scrollbar flex flex-col gap-6 text-gray-200'>
-					<div className='bg-black/20 border border-white/5 p-6 md:p-8 rounded-xl leading-relaxed text-sm md:text-base font-light font-sans mt-2 shadow-inner'>
-						<div className='mb-6 border-b border-white/10 pb-4'>
-							<h2 className='text-white font-semibold'>
-								<span className='text-purple-400 mr-2'>Subject:</span>
-								{coverLetterData.subject}
-							</h2>
+			<div className='border-white/10 bg-linear-to-br from-slate-800/90 to-slate-900/95 p-5 sm:p-6 md:p-8 backdrop-blur-md rounded-2xl flex flex-col shadow-lg h-full'>
+				{/* Header */}
+				<div className='flex items-center justify-between mb-6 shrink-0'>
+					<h1 className='text-xl sm:text-2xl md:text-3xl font-bold bg-linear-to-r from-orange-400 to-pink-400 bg-clip-text text-transparent'>
+						Cover Letter
+					</h1>
+					{loading && (
+						<div className='flex items-center gap-2 text-sm text-slate-400'>
+							<Loader2 size={14} className='animate-spin' />
+							Generating…
 						</div>
+					)}
+				</div>
 
-						<div className='space-y-4 text-gray-300 text-justify'>
-							<p className='text-white font-medium mb-4'>
-								{coverLetterData.salutation}
-							</p>
-
-							{coverLetterData.paragraphs.map((para, idx) => (
-								<p key={idx}>{para}</p>
-							))}
-						</div>
-
-						<div className='mt-8 pt-6 border-t border-white/10'>
-							<p className='text-gray-300 mb-4'>{coverLetterData.signOff}</p>
-							<h3 className='text-xl md:text-2xl font-bold bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent w-fit mb-3'>
-								{coverLetterData.signature.name}
-							</h3>
-							<div className='flex flex-col gap-1.5 text-sm text-gray-400'>
-								<p className='flex items-center gap-3'>
-									<span className='text-blue-400 text-lg'>📱</span>{" "}
-									{coverLetterData.signature.phone}
-								</p>
-								<p className='flex items-center gap-3'>
-									<span className='text-purple-400 text-lg'>✉️</span>{" "}
-									{coverLetterData.signature.email}
-								</p>
-								<p className='flex items-center gap-3'>
-									<span className='text-blue-500 text-lg'>🔗</span>
-									<a
-										href={coverLetterData.signature.linkedin}
-										target='_blank'
-										rel='noreferrer'
-										className='hover:text-purple-400 transition-colors underline-offset-4 hover:underline'>
-										LinkedIn Profile
-									</a>
-								</p>
+				{/* Content area */}
+				<div className='flex-1 min-h-0 flex flex-col'>
+					{loading ? (
+						<div className='flex flex-col items-center justify-center gap-4 py-16 flex-1'>
+							<div className='relative'>
+								<div className='h-14 w-14 rounded-full border-2 border-orange-500/20 border-t-orange-400 animate-spin' />
+								<Sparkles size={18} className='absolute inset-0 m-auto text-orange-300' />
 							</div>
+							<p className='text-slate-300 text-sm font-medium'>Generating your cover letter…</p>
+							<p className='text-slate-500 text-xs'>Powered by Gemini AI — ~10 seconds</p>
 						</div>
-					</div>
+					) : noResume ? (
+						<EmptyState />
+					) : error ? (
+						<div className='flex flex-col items-center gap-3 py-10 flex-1 justify-center'>
+							<AlertCircle size={28} className='text-red-400' />
+							<p className='text-red-300 text-sm text-center'>{error}</p>
+							<button
+								onClick={() => window.location.reload()}
+								className='text-xs text-slate-400 underline hover:text-white'>
+								Retry
+							</button>
+						</div>
+					) : data ? (
+						<>
+							{/* Letter body */}
+							<div className='flex-1 overflow-y-auto pr-1 no-scrollbar'>
+								<div className='bg-black/20 border border-white/5 p-6 md:p-8 rounded-xl leading-relaxed text-sm md:text-base font-light font-sans shadow-inner'>
+									{/* Subject */}
+									<div className='mb-5 border-b border-white/10 pb-4'>
+										<h2 className='text-white font-semibold'>
+											<span className='text-purple-400 mr-2'>Subject:</span>
+											{data.subject}
+										</h2>
+									</div>
 
-					<div className='flex justify-end gap-3 mt-2 shrink-0 pb-4'>
-						<button
-							className='px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-white font-medium transition-colors flex items-center gap-2'
-							onClick={() =>
-								navigator.clipboard.writeText(
-									coverLetterData.paragraphs.join("\n\n"),
-								)
-							}>
-							📋 Copy Text
-						</button>
-						<button className='px-4 py-2.5 bg-linear-to-r from-blue-600/30 to-purple-600/30 hover:from-blue-500/40 hover:to-purple-500/40 border border-blue-500/30 text-blue-200 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.15)]'>
-							📥 Download PDF
-						</button>
-					</div>
+									{/* Salutation + body */}
+									<div className='space-y-4 text-gray-300 text-justify'>
+										<p className='text-white font-medium'>{data.salutation}</p>
+										{data.paragraphs.map((para, idx) => (
+											<p key={idx} className='leading-7'>{para}</p>
+										))}
+									</div>
+
+									{/* Sign-off */}
+									<div className='mt-8 pt-6 border-t border-white/10 space-y-1'>
+										<p className='text-gray-300 mb-3'>{data.signOff}</p>
+										<h3 className='text-xl md:text-2xl font-bold bg-linear-to-r from-orange-400 to-pink-400 bg-clip-text text-transparent w-fit'>
+											{data.signature.name}
+										</h3>
+										<div className='flex flex-col gap-1.5 text-sm text-gray-400 mt-2'>
+											{data.signature.email && (
+												<p className='flex items-center gap-2'>
+													<span className='text-purple-400'>✉️</span> {data.signature.email}
+												</p>
+											)}
+											{data.signature.phone && (
+												<p className='flex items-center gap-2'>
+													<span className='text-blue-400'>📱</span> {data.signature.phone}
+												</p>
+											)}
+											{data.signature.linkedin && (
+												<p className='flex items-center gap-2'>
+													<span className='text-blue-500'>🔗</span>
+													<a
+														href={data.signature.linkedin}
+														target='_blank'
+														rel='noreferrer'
+														className='hover:text-purple-400 transition-colors underline-offset-4 hover:underline'>
+														LinkedIn Profile
+													</a>
+												</p>
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Action buttons */}
+							<div className='flex justify-end gap-3 mt-4 shrink-0'>
+								<button
+									onClick={handleCopy}
+									className='flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-white font-medium transition'>
+									{copied ? (
+										<><Check size={14} className='text-green-400' /> Copied!</>
+									) : (
+										<><Copy size={14} /> Copy Text</>
+									)}
+								</button>
+								<button
+									onClick={handleDownload}
+									className='flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-orange-600/30 to-pink-600/30 hover:from-orange-500/40 hover:to-pink-500/40 border border-orange-500/30 text-orange-200 rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(249,115,22,0.15)]'>
+									<Download size={14} /> Download TXT
+								</button>
+							</div>
+						</>
+					) : null}
 				</div>
 			</div>
 		</motion.div>

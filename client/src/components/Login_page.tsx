@@ -56,6 +56,7 @@ const Login_page = () => {
 			setTimeout(() => {
 				if (isLogin) {
 					localStorage.setItem("user", JSON.stringify(data.user));
+					if (data.token) localStorage.setItem("token", data.token);
 					navigate("/");
 				} else {
 					setIsLogin(true);

@@ -1,0 +1,180 @@
+{
+  "r1": {
+    "overallScore": 25,
+    "verdict": "Poor ATS Readiness",
+    "formatScore": 10,
+    "contentScore": 15,
+    "skillMatchScore": 30,
+    "keywordMatchScore": 35,
+    "missingSectionScore": 10,
+    "extractedSkills": [
+      "Java",
+      "Spring",
+      "AWS",
+      "Software Engineering"
+    ],
+    "missingKeywords": {
+      "technical": [
+        "Microservices",
+        "RESTful APIs",
+        "Database (SQL/NoSQL)",
+        "DevOps",
+        "CI/CD",
+        "Cloud Architecture",
+        "System Design",
+        "Unit Testing",
+        "Containerization"
+      ],
+      "tools": [
+        "Git",
+        "Maven",
+        "Gradle",
+        "Docker",
+        "Kubernetes",
+        "Jenkins",
+        "JIRA",
+        "Postman",
+        "SQL"
+      ],
+      "softSkills": [
+        "Problem-solving",
+        "Communication",
+        "Teamwork",
+        "Leadership",
+        "Agile Methodologies",
+        "Mentorship",
+        "Project Management"
+      ],
+      "domain": [
+        "FinTech",
+        "E-commerce",
+        "Healthcare",
+        "SaaS",
+        "Data Analytics"
+      ]
+    },
+    "suggestions": [
+      "Elaborate significantly on '10 years experience in Java, Spring, AWS.' by creating a dedicated 'Experience' section with specific companies, job titles, dates, and detailed bullet points describing accomplishments.",
+      "Introduce a 'Summary' or 'Professional Profile' section at the top to provide a concise overview of your expertise, career highlights, and target roles, incorporating relevant keywords.",
+      "For each technology mentioned (Java, Spring, AWS), provide context on *how* it was used and the *impact* or *results* achieved (e.g., 'Developed RESTful APIs using Spring Boot, increasing system throughput by 20%').",
+      "Add an 'Education' section, even if brief, and consider including any 'Projects' or 'Certifications' to demonstrate practical application of your skills."
+    ],
+    "missingSections": [
+      "Summary/Professional Profile",
+      "Experience (detailed roles, companies, dates)",
+      "Education",
+      "Projects",
+      "Certifications"
+    ],
+    "missingStats": {
+      "missingSkills": 25,
+      "weakSections": 1,
+      "keywordMatch": "15%"
+    },
+    "careerSuggestions": [
+      "Senior Java Developer",
+      "Backend Engineer (Java/Spring)",
+      "Cloud Software Engineer (AWS Focus)",
+      "Software Architect (Entry/Mid-Level based on lack of detail)"
+    ],
+    "learningPath": [
+      "AWS Certified Solutions Architect – Associate",
+      "Spring Boot Microservices Development",
+      "Containerization with Docker and Kubernetes",
+      "CI/CD Pipeline implementation (e.g., Jenkins, GitLab CI)"
+    ],
+    "topMatchRole": "Senior Java Developer",
+    "topMatchPercentage": 30,
+    "atsTips": [
+      "Elaborate on '10 years experience' by creating a detailed 'Experience' section with company names, dates, and 3-5 bullet points per role, quantifying achievements with numbers and metrics.",
+      "Integrate keywords like 'Java,' 'Spring,' and 'AWS' into achievement-oriented bullet points rather than just listing them, showing *how* you used them to deliver results.",
+      "Add a dedicated 'Skills' section categorized by technical, tools, and soft skills to improve keyword density and readability for ATS.",
+      "Include a 'Summary' section to provide a concise overview of your expertise, career highlights, and target roles, front-loading critical keywords for ATS scanning.",
+      "Ensure consistent formatting with clear headings for sections like 'Education,' 'Projects,' and 'Certifications' to make the resume easily parsable by ATS."
+    ]
+  },
+  "r2": {
+    "overallScore": 10,
+    "verdict": "Poor ATS Readiness",
+    "formatScore": 5,
+    "contentScore": 5,
+    "skillMatchScore": 10,
+    "keywordMatchScore": 10,
+    "missingSectionScore": 0,
+    "extractedSkills": [
+      "SEO",
+      "Content Strategy",
+      "Google Analytics"
+    ],
+    "missingKeywords": {
+      "technical": [
+        "CRM",
+        "Marketing Automation",
+        "SEM",
+        "Email Marketing Platforms",
+        "Data Visualization"
+      ],
+      "tools": [
+        "HubSpot",
+        "Salesforce",
+        "Google Ads",
+        "Facebook Ads Manager",
+        "SEMrush",
+        "Ahrefs"
+      ],
+      "softSkills": [
+        "Strategic Planning",
+        "Leadership",
+        "Project Management",
+        "Analytical Thinking",
+        "Communication",
+        "Team Collaboration"
+      ],
+      "domain": [
+        "Digital Marketing",
+        "Campaign Management",
+        "Brand Management",
+        "Market Research",
+        "Conversion Rate Optimization"
+      ]
+    },
+    "suggestions": [
+      "Develop a comprehensive 'Professional Summary' that outlines your career goals and key achievements as a 'Marketing Manager' to provide context.",
+      "Create a detailed 'Experience' section, listing previous roles, companies, dates, and bullet points describing specific responsibilities and quantifiable results.",
+      "Quantify the impact of 'SEO, Content Strategy, Google Analytics' by adding specific metrics (e.g., 'increased organic traffic by X%', 'improved content engagement by Y%').",
+      "Add an 'Education' section, including degrees obtained, institutions, and graduation dates to provide foundational academic context."
+    ],
+    "missingSections": [
+      "Summary",
+      "Experience",
+      "Education",
+      "Projects"
+    ],
+    "missingStats": {
+      "missingSkills": 20,
+      "weakSections": 1,
+      "keywordMatch": "5%"
+    },
+    "careerSuggestions": [
+      "Digital Marketing Manager",
+      "SEO Specialist",
+      "Content Marketing Manager",
+      "Marketing Analyst"
+    ],
+    "learningPath": [
+      "Advanced Google Analytics Certification",
+      "HubSpot Content Marketing Certification",
+      "Google Ads Certification",
+      "CRM Software (e.g., Salesforce/HubSpot) Training"
+    ],
+    "topMatchRole": "Marketing Manager",
+    "topMatchPercentage": 15,
+    "atsTips": [
+      "Implement a clear and organized structure with distinct headings for each section (e.g., 'Summary', 'Experience', 'Education', 'Skills') to ensure proper ATS parsing.",
+      "Expand the current single line of skills into a dedicated 'Skills' section, categorizing them into technical, marketing tools, and soft skills for better keyword density.",
+      "Integrate specific keywords from job descriptions for desired roles directly into your experience bullet points and summary, rather than just listing them generally.",
+      "Always include quantifiable achievements and metrics (e.g., percentages, dollar amounts, number of projects) in your experience descriptions to demonstrate impact to ATS and hiring managers.",
+      "Avoid unusual fonts, graphics, or complex layouts that can confuse ATS systems; stick to clean, standard resume templates."
+    ]
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "r1": {
+    "overallScore": 11,
+    "verdict": "Poor ATS Readiness",
+    "formatScore": 20,
+    "contentScore": 5,
+    "skillMatchScore": 15,
+    "keywordMatchScore": 10,
+    "missingSectionScore": 5,
+    "extractedSkills": [
+      "Java",
+      "Spring",
+      "AWS"
+    ],
+    "missingKeywords": {
+      "technical": [
+        "Microservices",
+        "RESTful APIs",
+        "Databases (SQL/NoSQL)",
+        "Data Structures",
+        "Algorithms",
+        "Cloud Computing (beyond general AWS)",
+        "DevOps",
+        "CI/CD",
+        "Testing (Unit, Integration, E2E)",
+        "System Design",
+        "Scalability",
+        "Security"
+      ],
+      "tools": [
+        "Git",
+        "Docker",
+        "Kubernetes",
+        "Maven",
+        "Gradle",
+        "Jenkins",
+        "Jira",
+        "Confluence",
+        "Linux",
+        "Terraform",
+        "Monitoring tools (e.g., Prometheus, Grafana)",
+        "Kafka",
+        "Redis"
+      ],
+      "softSkills": [
+        "Problem-solving",
+        "Teamwork",
+        "Communication",
+        "Leadership",
+        "Mentoring",
+        "Agile Methodologies",
+        "Critical Thinking",
+        "Adaptability"
+      ],
+      "domain": [
+        "Financial Services",
+        "E-commerce",
+        "Healthcare",
+        "SaaS",
+        "Telecommunications"
+      ]
+    },
+    "suggestions": [
+      "Develop a strong 'Summary' or 'Professional Profile' section to introduce your 10 years of experience and key expertise.",
+      "Create detailed 'Experience' sections for each prior role, quantifying achievements with metrics and using action verbs.",
+      "Add an 'Education' section with degrees, institutions, and graduation dates.",
+      "Include a comprehensive 'Technical Skills' section listing all relevant programming languages, frameworks, tools, databases, and cloud services.",
+      "Consider a 'Projects' or 'Portfolio' section to showcase practical applications of your skills, especially for personal work or open-source contributions.",
+      "Add any relevant 'Certifications' (e.g., AWS certifications, Spring certifications).",
+      "Elaborate on your AWS experience by listing specific services you've worked with (e.g., EC2, S3, Lambda, RDS, DynamoDB, VPC, CloudWatch)."
+    ],
+    "missingStats": {
+      "missingSkills": 20,
+      "weakSections": 7,
+      "keywordMatch": "5%"
+    },
+    "careerSuggestions": [
+      "Senior Backend Engineer",
+      "Cloud Software Engineer (AWS)",
+      "Java Developer Lead"
+    ],
+    "learningPath": [
+      "AWS Certified Solutions Architect – Associate",
+      "Microservices Architecture with Spring Boot",
+      "Containerization and Orchestration (Docker & Kubernetes)",
+      "Advanced CI/CD with Jenkins/GitLab CI"
+    ],
+    "topMatchRole": "Senior Java/AWS Software Engineer",
+    "topMatchPercentage": 10,
+    "atsTips": [
+      "Ensure clear section headings (e.g., 'Professional Experience', 'Technical Skills', 'Education') for easy parsing by ATS.",
+      "Use a standard, simple resume template without graphics, tables, or complex formatting that can confuse ATS.",
+      "Incorporate keywords from target job descriptions naturally throughout your experience and skills sections.",
+      "Quantify achievements with numbers and metrics whenever possible to provide concrete evidence of impact.",
+      "Submit your resume in PDF format unless a job description specifically requests another format (like Word)."
+    ]
+  },
+  "r2": {
+    "overallScore": 20,
+    "verdict": "Poor ATS Readiness",
+    "formatScore": 70,
+    "contentScore": 5,
+    "skillMatchScore": 10,
+    "keywordMatchScore": 10,
+    "missingSectionScore": 0,
+    "extractedSkills": [
+      "SEO",
+      "Content Strategy",
+      "Google Analytics"
+    ],
+    "missingKeywords": {
+      "technical": [
+        "Digital Marketing",
+        "Social Media Marketing",
+        "Email Marketing",
+        "PPC",
+        "Marketing Automation"
+      ],
+      "tools": [
+        "Google Ads",
+        "HubSpot",
+        "Mailchimp",
+        "SEMrush",
+        "WordPress"
+      ],
+      "softSkills": [
+        "Communication",
+        "Project Management",
+        "Data Analysis",
+        "Strategic Thinking",
+        "Leadership"
+      ],
+      "domain": [
+        "Lead Generation",
+        "Brand Management",
+        "Market Research",
+        "Campaign Management",
+        "ROI Analysis"
+      ]
+    },
+    "suggestions": [
+      "Develop comprehensive 'Experience' and 'Education' sections with detailed bullet points and achievements.",
+      "Include a strong 'Summary/Objective' statement that highlights your core competencies and career aspirations.",
+      "Quantify achievements in your experience section using metrics and results (e.g., 'increased X by Y%').",
+      "Expand your 'Skills' section to include a broader range of technical tools, marketing platforms, and soft skills.",
+      "Add contact information including phone number, email address, and a professional LinkedIn profile URL.",
+      "Consider including sections for 'Projects' or 'Certifications' to demonstrate practical application and continuous learning.",
+      "Tailor the resume content and keywords to specific job descriptions you apply for."
+    ],
+    "missingStats": {
+      "missingSkills": 30,
+      "weakSections": 5,
+      "keywordMatch": "3%"
+    },
+    "careerSuggestions": [
+      "SEO Specialist",
+      "Content Marketing Specialist",
+      "Digital Marketing Coordinator"
+    ],
+    "learningPath": [
+      "Google Ads Certification",
+      "HubSpot Content Marketing Certification",
+      "Advanced Marketing Analytics Course",
+      "Project Management for Marketing Teams"
+    ],
+    "topMatchRole": "Marketing Manager",
+    "topMatchPercentage": 20,
+    "atsTips": [
+      "Ensure your resume uses clear, standard headings like 'Experience,' 'Education,' and 'Skills' for easy parsing.",
+      "Integrate relevant keywords from job descriptions naturally into your resume text to improve matching.",
+      "Quantify your accomplishments with numbers and percentages to demonstrate concrete impact.",
+      "Avoid using graphics, tables, or unusual fonts that can confuse or be unreadable by ATS.",
+      "Submit your resume in a standard format like PDF or Word document, as specified by the employer."
+    ]
+  }
+}

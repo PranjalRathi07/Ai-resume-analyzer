@@ -82,7 +82,7 @@ export function AppSidebar() {
 	const navigate = useNavigate();
 
 	const handleSignOut = () => {
-		localStorage.removeItem("user");
+		localStorage.clear();
 		window.dispatchEvent(new Event("storage"));
 		navigate("/");
 	};

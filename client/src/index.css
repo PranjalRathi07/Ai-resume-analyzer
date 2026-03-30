@@ -107,3 +107,12 @@
 .no-scrollbar {
 	scrollbar-width: none;
 }
+
+.item.is-open {
+	visibility: hidden;
+}
+
+dialog::backdrop {
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(6px);
+}
