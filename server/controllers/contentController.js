@@ -1,29 +1,10 @@
 /** @format */
 
 const Resume = require("../models/Resume");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { canCallAI, runOnce, generateWithRetry } = require("../utils/aiUtils");
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Helper: get user's latest resume analysis
 async function getLatestResume(userId) {
 	return Resume.findOne({ userId }).sort({ createdAt: -1 }).lean();
-}
-
-// Helper: call Gemini with text prompt
-async function askGemini(prompt) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-	const result = await generateWithRetry(model, prompt, 2);
-	const text = result.response.text();
-	const cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
-	try {
-		return JSON.parse(cleaned);
-	} catch {
-		const match = cleaned.match(/\{[\s\S]*\}/);
-		if (match) return JSON.parse(match[0]);
-		throw new Error("Could not parse Gemini response: " + cleaned.substring(0, 200));
-	}
 }
 
 // ─── LEARNING PATH ─────────────────────────────────────────────────────────────
@@ -33,83 +14,62 @@ exports.getLearningPath = async (req, res) => {
 		const resume = await getLatestResume(req.userId);
 		if (!resume) return res.status(404).json({ message: "No resume found. Please upload first." });
 
-		// Check cache first to avoid locks/cooldowns optionally, but it's checked below too.
-		// However, it's fine.
-
-		if (!canCallAI(req.userId, "learning-path", 15000)) {
-			return res.status(429).json({ message: "Too many AI requests. Please wait a few seconds." });
+		if (resume.learningPathData) {
+			console.log(`[Cache] Returning cached Learning Path for resume ${resume._id}`);
+			return res.json(resume.learningPathData);
 		}
 
-		// Use in-flight lock to deduplicate concurrent requests
-		const data = await runOnce(`learning-path-${req.userId}`, async () => {
-			if (resume.learningPathData) {
-				console.log(`[Cache] Returning cached Learning Path for resume ${resume._id}`);
-				return resume.learningPathData;
-			}
-
+		console.log(`[Static] Generating Learning Path locally for resume ${resume._id}...`);
+		
 		const { analysisData } = resume;
-		const knownSkills = (analysisData?.extractedSkills ?? []).join(", ") || "general web development skills";
-		const missingSkills = [
+		const knownArray = analysisData?.extractedSkills || ["Web Development Basics"];
+		const missingArray = [
 			...(analysisData?.missingKeywords?.technical ?? []),
 			...(analysisData?.missingKeywords?.tools ?? []),
-		].join(", ") || "advanced frameworks and deployment";
-		const learningPath = (analysisData?.learningPath ?? []).join(", ");
+		];
+		if (missingArray.length === 0) missingArray.push("Advanced Frameworks", "Cloud Deployment");
+		
+		const learningTopics = analysisData?.learningPath ?? ["Foundations", "Advanced Concepts", "Projects"];
 		const careerGoal = (analysisData?.careerSuggestions?.[0]) ?? "Full Stack Developer";
 
-		const prompt = `
-You are an expert software engineering career coach. Based on this candidate's resume analysis, generate a personalized learning path.
-
-CANDIDATE DATA:
-- Known skills: ${knownSkills}
-- Missing skills: ${missingSkills}
-- Recommended courses per analysis: ${learningPath}
-- Career goal: ${careerGoal}
-- Overall resume score: ${analysisData?.overallScore ?? 60}/100
-
-Return ONLY valid JSON with this exact structure (no markdown):
-{
-  "currentLevel": {
-    "title": "YOUR CURRENT LEVEL (Based on Resume)",
-    "known": ["<skill they have>", ...],
-    "missing": ["<skill gap>", ...]
-  },
-  "learningSteps": [
-    {
-      "id": 1,
-      "title": "<topic title>",
-      "importance": "<optional: 'VERY IMPORTANT' or 'CRITICAL 🚨'>",
-      "topics": ["<subtopic>", ...],
-      "courses": [{"name": "<course name>", "tag": "<optional: Free/Paid>"}],
-      "personalNote": {"text": "<personalized advice>", "items": ["<item>"]}
-    }
-  ],
-  "recommendedCombination": [
-    {"area": "<area>", "course": "<course recommendation>"}
-  ],
-  "weeklyPlan": [
-    {"weeks": "Week 1-3", "task": "<task>"}
-  ],
-  "finalAdvice": {
-    "strengths": ["<strength>", ...],
-    "focusOn": ["<focus area>", ...]
-  }
-}
-Generate 6-8 learning steps relevant to the candidate's actual skills and gaps.
-`;
-
-		const data = await askGemini(prompt);
+		const data = {
+			currentLevel: {
+				title: `Aspiring ${careerGoal}`,
+				known: knownArray.slice(0, 10),
+				missing: missingArray.slice(0, 8)
+			},
+			learningSteps: learningTopics.slice(0, 6).map((topic, index) => ({
+				id: index + 1,
+				title: topic,
+				importance: index === 0 ? "CRITICAL 🚨" : (index <= 2 ? "VERY IMPORTANT" : ""),
+				topics: [`Core principles of ${topic}`, `Libraries and Tools for ${topic}`, `Best Practices`],
+				courses: [{ name: `Comprehensive ${topic} Guide`, tag: index % 2 === 0 ? "Free" : "Recommended" }],
+				personalNote: { 
+					text: `Prioritize this to strengthen your profile for ${careerGoal} roles.`, 
+					items: [`Practice building a mini-project focusing on ${topic}.`] 
+				}
+			})),
+			recommendedCombination: [
+				{ area: "Core Foundations", course: `${learningTopics[0] || "Programming"} Masterclass` },
+				{ area: "Advanced Skills", course: `${learningTopics[1] || "Frameworks"} Deep Dive` }
+			],
+			weeklyPlan: [
+				{ weeks: "Week 1-2", task: `Focus entirely on grasping ${learningTopics[0]}` },
+				{ weeks: "Week 3-4", task: `Build 2 projects using ${learningTopics[1]} and integrate with previous skills` },
+				{ weeks: "Week 5-6", task: `Review missing gaps like ${missingArray[0] || "Testing"}` }
+			],
+			finalAdvice: {
+				strengths: knownArray.slice(0, 3),
+				focusOn: missingArray.slice(0, 3)
+			}
+		};
 
 		// Save to cache
 		await Resume.findByIdAndUpdate(resume._id, { learningPathData: data });
-		return data;
-		});
 
 		res.json(data);
 	} catch (err) {
 		console.error("Learning path error:", err.message);
-		if (err.message && err.message.includes("429")) {
-			return res.status(429).json({ message: "AI rate limit reached. Please wait a minute and try again." });
-		}
 		res.status(500).json({ message: "Failed to generate learning path: " + err.message });
 	}
 };
@@ -121,84 +81,55 @@ exports.getCareerPath = async (req, res) => {
 		const resume = await getLatestResume(req.userId);
 		if (!resume) return res.status(404).json({ message: "No resume found. Please upload first." });
 
-		if (!canCallAI(req.userId, "career-path", 15000)) {
-			return res.status(429).json({ message: "Too many AI requests. Please wait a few seconds." });
+		if (resume.careerPathData) {
+			console.log(`[Cache] Returning cached Career Path for resume ${resume._id}`);
+			return res.json(resume.careerPathData);
 		}
 
-		// Use in-flight lock to deduplicate concurrent requests
-		const data = await runOnce(`career-path-${req.userId}`, async () => {
-			if (resume.careerPathData) {
-				console.log(`[Cache] Returning cached Career Path for resume ${resume._id}`);
-				return resume.careerPathData;
-			}
-
+		console.log(`[Static] Generating Career Path locally for resume ${resume._id}...`);
+		
 		const { analysisData } = resume;
-		const knownSkills = (analysisData?.extractedSkills ?? []).join(", ") || "web development";
-		const careerSuggestions = (analysisData?.careerSuggestions ?? ["Full Stack Developer", "Frontend Developer", "Software Engineer"]).join(", ");
-		const overallScore = analysisData?.overallScore ?? 60;
-		const topRole = analysisData?.topMatchRole ?? "Full Stack Developer";
-		const topPct = analysisData?.topMatchPercentage ?? 65;
+		const careerSuggestions = analysisData?.careerSuggestions ?? ["Software Engineer", "Frontend Developer", "Backend Developer"];
+		const topRole = analysisData?.topMatchRole ?? careerSuggestions[0] ?? "Software Developer";
+		const topPct = analysisData?.topMatchPercentage ?? 70;
 
-		const prompt = `
-You are a tech career advisor. Based on this resume analysis, generate a personalized career path guide.
-
-CANDIDATE DATA:
-- Known skills: ${knownSkills}
-- Career suggestions from AI: ${careerSuggestions}
-- Best matching role: ${topRole} (${topPct}% match)
-- Resume score: ${overallScore}/100
-
-Return ONLY valid JSON with this exact structure (no markdown):
-{
-  "careerPaths": [
-    {
-      "id": 1,
-      "title": "<role title>",
-      "tag": "<e.g. BEST FIT / SAFE PATH / General SDE>",
-      "icon": "<single emoji>",
-      "hook": "<one-line reason for this path>",
-      "sections": [
-        {"title": "Why?", "subtitle": "<optional>", "items": ["<item>"], "text": "<optional>"},
-        {"title": "Roles you can target:", "items": ["<role>"]},
-        {"title": "Growth:", "text": "Junior → SDE → Senior → Lead"}
-      ]
-    }
-  ],
-  "notIdealPaths": [
-    {"role": "<role>", "reason": "<why not ideal right now>"}
-  ],
-  "strategy": {
-    "rules": ["<rule 1>", "<rule 2>"],
-    "recommendation": {
-      "primary": "<primary career path>",
-      "secondary": "<secondary / backup path>"
-    }
-  },
-  "nextSteps": [
-    {
-      "title": "<step title>",
-      "subtext": "<optional note>",
-      "actions": ["<action>", ...]
-    }
-  ]
-}
-Generate 3 career paths (best fit first), 2-3 not-ideal paths, and 4 next steps. Be specific to the candidate's skills.
-`;
-
-		console.log(`[AI] Generating Career Path for resume ${resume._id}...`);
-		const data = await askGemini(prompt);
+		const data = {
+			careerPaths: careerSuggestions.slice(0, 3).map((role, idx) => ({
+				id: idx + 1,
+				title: role,
+				tag: idx === 0 ? "BEST FIT" : (idx === 1 ? "SAFE PATH" : "ALTERNATIVE"),
+				icon: idx === 0 ? "🌟" : (idx === 1 ? "🚀" : "💡"),
+				hook: idx === 0 ? `Strong ${topPct}% match based on your core skills.` : `A viable secondary career path to consider.`,
+				sections: [
+					{ title: "Why?", items: [`Leverages your existing background in tech.`], text: "A highly demanded role in the current market." },
+					{ title: "Roles you can target:", items: [`Junior ${role}`, `Mid-level ${role}`] },
+					{ title: "Growth:", text: `Associate ${role} → ${role} → Senior ${role} → Technical Lead` }
+				]
+			})),
+			notIdealPaths: [
+				{ role: "Product Manager", reason: "Requires more cross-functional leading experience than currently shown on your resume." },
+				{ role: "Data Scientist", reason: "Lacking heavy statistical and machine learning academic background." }
+			],
+			strategy: {
+				rules: ["Keep building hands-on projects", "Iterate on missing skills rapidly", "Focus on impact-driven bullet points"],
+				recommendation: {
+					primary: topRole,
+					secondary: careerSuggestions[1] ?? "Quality Assurance Engineer"
+				}
+			},
+			nextSteps: [
+				{ title: "Fill Key Gaps", subtext: "Urgent", actions: ["Learn the missing frameworks identified in your analysis"] },
+				{ title: "Update Resume", subtext: "Before applying", actions: ["Incorporate the targeted keywords we recommended"] },
+				{ title: "Apply Actively", subtext: "Target 5-10 apps/week", actions: [`Search for ${topRole} roles on LinkedIn and Indeed`] }
+			]
+		};
 
 		// Save to cache
 		await Resume.findByIdAndUpdate(resume._id, { careerPathData: data });
-		return data;
-		});
 
 		res.json(data);
 	} catch (err) {
 		console.error("Career path error:", err.message);
-		if (err.message && err.message.includes("429")) {
-			return res.status(429).json({ message: "AI rate limit reached. Please wait a minute and try again." });
-		}
 		res.status(500).json({ message: "Failed to generate career path: " + err.message });
 	}
 };
@@ -210,19 +141,15 @@ exports.getCoverLetter = async (req, res) => {
 		const resume = await getLatestResume(req.userId);
 		if (!resume) return res.status(404).json({ message: "No resume found. Please upload first." });
 
-		if (!canCallAI(req.userId, "cover-letter", 15000)) {
-			return res.status(429).json({ message: "Too many AI requests. Please wait a few seconds." });
+		if (resume.coverLetterData) {
+			console.log(`[Cache] Returning cached Cover Letter for resume ${resume._id}`);
+			return res.json(resume.coverLetterData);
 		}
 
-		// Use in-flight lock to deduplicate concurrent requests
-		const data = await runOnce(`cover-letter-${req.userId}`, async () => {
-			if (resume.coverLetterData) {
-				console.log(`[Cache] Returning cached Cover Letter for resume ${resume._id}`);
-				return resume.coverLetterData;
-			}
+		console.log(`[Static] Generating Cover Letter locally for resume ${resume._id}...`);
 
-		const { analysisData, resumeText, fileName } = resume;
-		const skills = (analysisData?.extractedSkills ?? []).slice(0, 10).join(", ") || "web development";
+		const { analysisData } = resume;
+		const skills = (analysisData?.extractedSkills ?? []).slice(0, 6).join(", ") || "problem-solving and software development";
 		const targetRole = analysisData?.careerSuggestions?.[0] ?? "Software Developer";
 		const topRole = analysisData?.topMatchRole ?? targetRole;
 
@@ -232,54 +159,29 @@ exports.getCoverLetter = async (req, res) => {
 		const userName = user?.name ?? "Applicant";
 		const userEmail = user?.email ?? "";
 
-		const resumeSnippet = resumeText ? resumeText.substring(0, 1500) : "No resume text available";
-
-		const prompt = `
-You are a professional resume writer. Generate a tailored cover letter for this candidate.
-
-CANDIDATE DATA:
-- Name: ${userName}
-- Email: ${userEmail}
-- Known skills: ${skills}
-- Target role: ${topRole}
-- Resume score: ${analysisData?.overallScore ?? 60}/100
-- Resume text excerpt: ${resumeSnippet}
-
-Return ONLY valid JSON with this exact structure (no markdown):
-{
-  "subject": "Application for ${topRole} Position",
-  "salutation": "Dear Hiring Manager,",
-  "paragraphs": [
-    "<opening paragraph: express interest and introduce yourself>",
-    "<experience paragraph: highlight key experience/internships from resume>",
-    "<project paragraph: mention a key project with tech stack>",
-    "<skills paragraph: summarize technical skills>",
-    "<closing paragraph: enthusiasm and call to action>",
-    "<thank you line>"
-  ],
-  "signOff": "Sincerely,",
-  "signature": {
-    "name": "${userName}",
-    "email": "${userEmail}"
-  }
-}
-Make the letter professional, personalized, and specific to the candidate's actual resume content. 4-5 strong paragraphs.
-`;
-
-		console.log(`[AI] Generating Cover Letter for resume ${resume._id}...`);
-		const data = await askGemini(prompt);
+		const data = {
+			subject: `Application for ${topRole} Position`,
+			salutation: "Dear Hiring Manager,",
+			paragraphs: [
+				`I am writing to express my strong interest in the ${topRole} position at your company. With a solid foundation in technology and a drive for creating effective solutions, I am confident in my ability to contribute meaningfully to your engineering team.`,
+				`Throughout my background, I have developed professional experience that aligns with the core requirements of this role. I consider myself a highly adaptable professional with a proven track record of continuously improving my technical depth and collaborating extensively to overcome complex challenges.`,
+				`Particularly, my expertise in ${skills} has equipped me to build robust applications and scale effectively. Some highlights of my background include optimizing existing systems and quickly adapting to modern frameworks, matching specifically what an innovative company looks for.`,
+				`I am highly enthusiastic about the possibility of bringing my unique blend of technical expertise and problem-solving skills to your team. Enclosed is my resume which details my background further.`,
+				`Thank you for your time and consideration. I look forward to the opportunity to discuss my qualifications.`
+			],
+			signOff: "Sincerely,",
+			signature: {
+				name: userName,
+				email: userEmail
+			}
+		};
 
 		// Save to cache
 		await Resume.findByIdAndUpdate(resume._id, { coverLetterData: data });
-		return data;
-		});
 
 		res.json(data);
 	} catch (err) {
 		console.error("Cover letter error:", err.message);
-		if (err.message && err.message.includes("429")) {
-			return res.status(429).json({ message: "AI rate limit reached. Please wait a minute and try again." });
-		}
 		res.status(500).json({ message: "Failed to generate cover letter: " + err.message });
 	}
 };
