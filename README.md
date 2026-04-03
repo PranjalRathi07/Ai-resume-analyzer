@@ -52,7 +52,3 @@ Unlike traditional resume tools, this project:
 
 ### AI Integration
 - AI APIs (for resume analysis & recommendations)
-
----
-
-## 🏗 Project Structure
