@@ -12,7 +12,6 @@ import {
 	Sparkles,
 	ArrowRight,
 	X,
-	Download,
 	LayoutTemplate,
 	Zap,
 	Target,
