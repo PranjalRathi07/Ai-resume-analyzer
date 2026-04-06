@@ -141,7 +141,7 @@ const buildAnalysisSections = (data: AnalysisData): AnalysisSection[] => [
 		barColor: "from-cyan-400 to-blue-500",
 		details: [
 			`${data.extractedSkills.length} skills detected on resume`,
-			...(data.missingKeywords.technical.slice(0, 2).map((k) => `Missing: ${k}`)),
+			...data.missingKeywords.technical.slice(0, 2).map((k) => `Missing: ${k}`),
 			"Add soft skills section for completeness",
 		],
 	},
@@ -153,7 +153,7 @@ const buildAnalysisSections = (data: AnalysisData): AnalysisSection[] => [
 		barColor: "from-emerald-400 to-teal-500",
 		details: [
 			`${data.missingStats.keywordMatch} keyword match with target JD`,
-			...(data.missingKeywords.tools.slice(0, 2).map((k) => `Missing: ${k}`)),
+			...data.missingKeywords.tools.slice(0, 2).map((k) => `Missing: ${k}`),
 			"Use standard section names like 'Experience'",
 		],
 	},
@@ -163,12 +163,12 @@ const buildAnalysisSections = (data: AnalysisData): AnalysisSection[] => [
 		score: data.missingSectionScore,
 		color: "text-orange-300",
 		barColor: "from-orange-400 to-pink-500",
-		details: data.missingSections && data.missingSections.length > 0 
-			? data.missingSections 
-			: data.suggestions.slice(-4),
+		details:
+			data.missingSections && data.missingSections.length > 0
+				? data.missingSections
+				: data.suggestions.slice(-4),
 	},
 ];
-
 
 type KeywordCategory = {
 	title: string;
@@ -176,8 +176,6 @@ type KeywordCategory = {
 	badgeColor: string;
 	keywords: string[];
 };
-
-
 
 const atsTips = [
 	"Use exact keyword phrases from the job description — ATS matches verbatim.",
@@ -193,7 +191,11 @@ type ImproveKeywordsModalProps = {
 	analysisData?: AnalysisData | null;
 };
 
-const ImproveKeywordsModal = ({ open, onClose, analysisData }: ImproveKeywordsModalProps) => {
+const ImproveKeywordsModal = ({
+	open,
+	onClose,
+	analysisData,
+}: ImproveKeywordsModalProps) => {
 	const overlayRef = useRef<HTMLDivElement>(null);
 	const [visible, setVisible] = useState(false);
 	const [animOut, setAnimOut] = useState(false);
@@ -297,13 +299,17 @@ const ImproveKeywordsModal = ({ open, onClose, analysisData }: ImproveKeywordsMo
 							<span className='text-slate-300 font-medium'>
 								Current Keyword Match Score
 							</span>
-							<span className='font-bold text-white'>{analysisData?.keywordMatchScore ?? 0}%</span>
+							<span className='font-bold text-white'>
+								{analysisData?.keywordMatchScore ?? 0}%
+							</span>
 						</div>
 						<div className='h-2 rounded-full bg-white/10 mb-2'>
 							<div
 								className='h-2 rounded-full bg-linear-to-r from-fuchsia-500 to-violet-500'
 								style={{
-									width: visible ? `${analysisData?.keywordMatchScore ?? 0}%` : "0%",
+									width: visible
+										? `${analysisData?.keywordMatchScore ?? 0}%`
+										: "0%",
 									transition: "width 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s",
 								}}
 							/>
@@ -315,34 +321,61 @@ const ImproveKeywordsModal = ({ open, onClose, analysisData }: ImproveKeywordsMo
 
 					{/* Missing keyword categories */}
 					<div className='space-y-3'>
-						{([
-							{ title: "Technical Skills", color: "text-violet-300", badgeColor: "border-violet-400/25 bg-violet-500/10 text-violet-300", keywords: analysisData?.missingKeywords?.technical ?? [] },
-							{ title: "Tools & Platforms", color: "text-cyan-300", badgeColor: "border-cyan-400/25 bg-cyan-500/10 text-cyan-300", keywords: analysisData?.missingKeywords?.tools ?? [] },
-							{ title: "Soft Skills", color: "text-fuchsia-300", badgeColor: "border-fuchsia-400/25 bg-fuchsia-500/10 text-fuchsia-300", keywords: analysisData?.missingKeywords?.softSkills ?? [] },
-							{ title: "Domain Keywords", color: "text-emerald-300", badgeColor: "border-emerald-400/25 bg-emerald-500/10 text-emerald-300", keywords: analysisData?.missingKeywords?.domain ?? [] },
-						] as KeywordCategory[]).filter(cat => cat.keywords.length > 0).map((cat, i) => (
-							<div
-								key={cat.title}
-								className='rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/[0.07]'
-								style={{
-									opacity: visible ? 1 : 0,
-									transform: visible ? "translateY(0)" : "translateY(12px)",
-									transition: `opacity 0.4s ease ${0.1 + i * 0.07}s, transform 0.4s ease ${0.1 + i * 0.07}s`,
-								}}>
-								<p className={`text-sm font-semibold mb-3 ${cat.color}`}>
-									{cat.title}
-								</p>
-								<div className='flex flex-wrap gap-2'>
-									{cat.keywords.map((kw) => (
-										<span
-											key={kw}
-											className={`rounded-full border px-3 py-1 text-xs font-medium ${cat.badgeColor}`}>
-											{kw}
-										</span>
-									))}
+						{(
+							[
+								{
+									title: "Technical Skills",
+									color: "text-violet-300",
+									badgeColor:
+										"border-violet-400/25 bg-violet-500/10 text-violet-300",
+									keywords: analysisData?.missingKeywords?.technical ?? [],
+								},
+								{
+									title: "Tools & Platforms",
+									color: "text-cyan-300",
+									badgeColor: "border-cyan-400/25 bg-cyan-500/10 text-cyan-300",
+									keywords: analysisData?.missingKeywords?.tools ?? [],
+								},
+								{
+									title: "Soft Skills",
+									color: "text-fuchsia-300",
+									badgeColor:
+										"border-fuchsia-400/25 bg-fuchsia-500/10 text-fuchsia-300",
+									keywords: analysisData?.missingKeywords?.softSkills ?? [],
+								},
+								{
+									title: "Domain Keywords",
+									color: "text-emerald-300",
+									badgeColor:
+										"border-emerald-400/25 bg-emerald-500/10 text-emerald-300",
+									keywords: analysisData?.missingKeywords?.domain ?? [],
+								},
+							] as KeywordCategory[]
+						)
+							.filter((cat) => cat.keywords.length > 0)
+							.map((cat, i) => (
+								<div
+									key={cat.title}
+									className='rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/[0.07]'
+									style={{
+										opacity: visible ? 1 : 0,
+										transform: visible ? "translateY(0)" : "translateY(12px)",
+										transition: `opacity 0.4s ease ${0.1 + i * 0.07}s, transform 0.4s ease ${0.1 + i * 0.07}s`,
+									}}>
+									<p className={`text-sm font-semibold mb-3 ${cat.color}`}>
+										{cat.title}
+									</p>
+									<div className='flex flex-wrap gap-2'>
+										{cat.keywords.map((kw) => (
+											<span
+												key={kw}
+												className={`rounded-full border px-3 py-1 text-xs font-medium ${cat.badgeColor}`}>
+												{kw}
+											</span>
+										))}
+									</div>
 								</div>
-							</div>
-						))}
+							))}
 					</div>
 
 					{/* ATS Tips */}
@@ -524,11 +557,6 @@ const FullAnalysisModal = ({
 
 					<div className='flex items-center gap-2 shrink-0'>
 						<button
-							id='download-report-btn'
-							className='hidden sm:flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/10 hover:border-violet-400/30'>
-							<Download size={13} /> Download Report
-						</button>
-						<button
 							id='close-analysis-modal-btn'
 							onClick={triggerClose}
 							className='flex items-center justify-center h-8 w-8 rounded-xl border border-white/10 bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-white'>
@@ -541,46 +569,48 @@ const FullAnalysisModal = ({
 					className='flex-1 overflow-y-auto px-6 pb-6 space-y-4 no-scrollbar'
 					style={{ scrollbarWidth: "none" }}>
 					<div className='space-y-3'>
-						{(analysisData ? buildAnalysisSections(analysisData) : []).map((sec, i) => (
-							<div
-								key={sec.title}
-								className='rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/[0.07]'
-								style={{
-									opacity: visible ? 1 : 0,
-									transform: visible ? "translateY(0)" : "translateY(12px)",
-									transition: `opacity 0.4s ease ${0.1 + i * 0.07}s, transform 0.4s ease ${0.1 + i * 0.07}s`,
-								}}>
-								<div className='flex items-center justify-between mb-3'>
-									<div
-										className={`flex items-center gap-2 text-sm font-semibold ${sec.color}`}>
-										{sec.icon}
-										{sec.title}
+						{(analysisData ? buildAnalysisSections(analysisData) : []).map(
+							(sec, i) => (
+								<div
+									key={sec.title}
+									className='rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/[0.07]'
+									style={{
+										opacity: visible ? 1 : 0,
+										transform: visible ? "translateY(0)" : "translateY(12px)",
+										transition: `opacity 0.4s ease ${0.1 + i * 0.07}s, transform 0.4s ease ${0.1 + i * 0.07}s`,
+									}}>
+									<div className='flex items-center justify-between mb-3'>
+										<div
+											className={`flex items-center gap-2 text-sm font-semibold ${sec.color}`}>
+											{sec.icon}
+											{sec.title}
+										</div>
+										<span className='text-sm font-bold text-white'>
+											{sec.score}%
+										</span>
 									</div>
-									<span className='text-sm font-bold text-white'>
-										{sec.score}%
-									</span>
+									<div className='h-1.5 rounded-full bg-white/10 mb-3'>
+										<div
+											className={`h-1.5 rounded-full bg-linear-to-r ${sec.barColor}`}
+											style={{
+												width: visible ? `${sec.score}%` : "0%",
+												transition: `width 0.8s cubic-bezier(0.22,1,0.36,1) ${0.15 + i * 0.07}s`,
+											}}
+										/>
+									</div>
+									<ul className='space-y-1'>
+										{sec.details.map((d) => (
+											<li
+												key={d}
+												className='flex items-start gap-2 text-xs text-slate-400'>
+												<span className='mt-0.5 h-1 w-1 rounded-full bg-slate-500 shrink-0' />
+												{d}
+											</li>
+										))}
+									</ul>
 								</div>
-								<div className='h-1.5 rounded-full bg-white/10 mb-3'>
-									<div
-										className={`h-1.5 rounded-full bg-linear-to-r ${sec.barColor}`}
-										style={{
-											width: visible ? `${sec.score}%` : "0%",
-											transition: `width 0.8s cubic-bezier(0.22,1,0.36,1) ${0.15 + i * 0.07}s`,
-										}}
-									/>
-								</div>
-								<ul className='space-y-1'>
-									{sec.details.map((d) => (
-										<li
-											key={d}
-											className='flex items-start gap-2 text-xs text-slate-400'>
-											<span className='mt-0.5 h-1 w-1 rounded-full bg-slate-500 shrink-0' />
-											{d}
-										</li>
-									))}
-								</ul>
-							</div>
-						))}
+							),
+						)}
 					</div>
 
 					<div
@@ -661,7 +691,10 @@ const Dashboard = () => {
 		setProgress(0);
 		const interval = setInterval(() => {
 			setProgress((prev) => {
-				if (prev >= target) { clearInterval(interval); return target; }
+				if (prev >= target) {
+					clearInterval(interval);
+					return target;
+				}
 				return prev + 1;
 			});
 		}, 30);
@@ -687,16 +720,31 @@ const Dashboard = () => {
 	// Derived data with fallbacks
 	const missingKeywordsFlat = analysis
 		? [
-				...( analysis.missingKeywords?.technical ?? []),
-				...( analysis.missingKeywords?.tools ?? []),
-				...( analysis.missingKeywords?.softSkills ?? []),
-		  ].slice(0, 6)
+				...(analysis.missingKeywords?.technical ?? []),
+				...(analysis.missingKeywords?.tools ?? []),
+				...(analysis.missingKeywords?.softSkills ?? []),
+			].slice(0, 6)
 		: [];
 
 	const scoreBreakdown = [
-		{ label: "Format", pct: `${analysis?.formatScore ?? 0}%`, val: analysis?.formatScore ?? 0, color: "from-blue-400 to-violet-500" },
-		{ label: "Content Impact", pct: `${analysis?.contentScore ?? 0}%`, val: analysis?.contentScore ?? 0, color: "from-violet-400 to-fuchsia-500" },
-		{ label: "Skill Match", pct: `${analysis?.skillMatchScore ?? 0}%`, val: analysis?.skillMatchScore ?? 0, color: "from-cyan-400 to-blue-500" },
+		{
+			label: "Format",
+			pct: `${analysis?.formatScore ?? 0}%`,
+			val: analysis?.formatScore ?? 0,
+			color: "from-blue-400 to-violet-500",
+		},
+		{
+			label: "Content Impact",
+			pct: `${analysis?.contentScore ?? 0}%`,
+			val: analysis?.contentScore ?? 0,
+			color: "from-violet-400 to-fuchsia-500",
+		},
+		{
+			label: "Skill Match",
+			pct: `${analysis?.skillMatchScore ?? 0}%`,
+			val: analysis?.skillMatchScore ?? 0,
+			color: "from-cyan-400 to-blue-500",
+		},
 	];
 
 	// No resume uploaded yet
@@ -707,9 +755,12 @@ const Dashboard = () => {
 					<Gauge size={36} className='text-violet-400' />
 				</div>
 				<div>
-					<h2 className='text-2xl font-bold text-white mb-2'>No Resume Analyzed Yet</h2>
+					<h2 className='text-2xl font-bold text-white mb-2'>
+						No Resume Analyzed Yet
+					</h2>
 					<p className='text-slate-400 max-w-sm'>
-						Upload your resume on the home page to get a full AI-powered analysis with scores, keyword gaps, and career suggestions.
+						Upload your resume on the home page to get a full AI-powered
+						analysis with scores, keyword gaps, and career suggestions.
 					</p>
 				</div>
 				<Link
@@ -753,13 +804,21 @@ const Dashboard = () => {
 									<p className='text-sm font-medium text-slate-400'>
 										Overall resume evaluation
 									</p>
-									<p className={`mt-2 text-sm font-semibold ${
-										targetScore >= 80 ? 'text-emerald-300' :
-										targetScore >= 65 ? 'text-cyan-300' :
-										targetScore >= 50 ? 'text-yellow-300' : 'text-red-400'
-									}`}>{analysis.verdict}</p>
+									<p
+										className={`mt-2 text-sm font-semibold ${
+											targetScore >= 80
+												? "text-emerald-300"
+												: targetScore >= 65
+													? "text-cyan-300"
+													: targetScore >= 50
+														? "text-yellow-300"
+														: "text-red-400"
+										}`}>
+										{analysis.verdict}
+									</p>
 									<p className='mt-1 text-sm leading-relaxed text-slate-400'>
-										{analysis.suggestions[0] ?? "Upload a resume to see analysis."}
+										{analysis.suggestions[0] ??
+											"Upload a resume to see analysis."}
 									</p>
 								</div>
 								<div className='relative h-20 w-20 shrink-0'>
@@ -771,7 +830,14 @@ const Dashboard = () => {
 											rotation: 0.635,
 											trailColor: "#111827",
 											strokeLinecap: "round",
-											pathColor: targetScore >= 80 ? "#10b981" : targetScore >= 65 ? "#06b6d4" : targetScore >= 50 ? "#eab308" : "#ef4444",
+											pathColor:
+												targetScore >= 80
+													? "#10b981"
+													: targetScore >= 65
+														? "#06b6d4"
+														: targetScore >= 50
+															? "#eab308"
+															: "#ef4444",
 										})}
 									/>
 									<span className='absolute bottom-1 left-1/2 -translate-x-1/2 text-lg font-extrabold text-white'>
@@ -787,7 +853,9 @@ const Dashboard = () => {
 										className='rounded-2xl border border-white/5 bg-white/5 p-3'>
 										<div className='flex items-center justify-between mb-2'>
 											<span className='text-sm text-slate-300'>{label}</span>
-											<span className='text-sm font-semibold text-white'>{pct}</span>
+											<span className='text-sm font-semibold text-white'>
+												{pct}
+											</span>
 										</div>
 										<div className='h-2 rounded-full bg-white/10'>
 											<div
@@ -843,9 +911,22 @@ const Dashboard = () => {
 
 									<div className='grid grid-cols-3 gap-3'>
 										{[
-											{ label: "Missing Skills", val: String(analysis.missingStats?.missingSkills ?? 0).padStart(2, '0') },
-											{ label: "Weak Sections", val: String(analysis.missingStats?.weakSections ?? 0).padStart(2, '0') },
-											{ label: "Keyword Match", val: analysis.missingStats?.keywordMatch ?? '0%' },
+											{
+												label: "Missing Skills",
+												val: String(
+													analysis.missingStats?.missingSkills ?? 0,
+												).padStart(2, "0"),
+											},
+											{
+												label: "Weak Sections",
+												val: String(
+													analysis.missingStats?.weakSections ?? 0,
+												).padStart(2, "0"),
+											},
+											{
+												label: "Keyword Match",
+												val: analysis.missingStats?.keywordMatch ?? "0%",
+											},
 										].map(({ label, val }) => (
 											<div
 												key={label}
@@ -920,7 +1001,12 @@ const Dashboard = () => {
 											</span>
 										</div>
 										<div className='h-2 rounded-full bg-white/10'>
-											<div className='h-2 rounded-full bg-linear-to-r from-cyan-400 to-blue-500 transition-all duration-700' style={{ width: `${analysis.topMatchPercentage ?? 0}%` }} />
+											<div
+												className='h-2 rounded-full bg-linear-to-r from-cyan-400 to-blue-500 transition-all duration-700'
+												style={{
+													width: `${analysis.topMatchPercentage ?? 0}%`,
+												}}
+											/>
 										</div>
 									</div>
 									<button className='flex w-fit items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:shadow-[0_0_18px_rgba(6,182,212,0.18)]'>

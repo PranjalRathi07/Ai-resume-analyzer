@@ -14,7 +14,9 @@ const app = express();
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	max: 100, // limit each IP to 100 requests per windowMs
-	message: { message: "Too many requests from this IP, please try again later." }
+	message: {
+		message: "Too many requests from this IP, please try again later.",
+	},
 });
 
 app.use(cors());
@@ -34,7 +36,7 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 // MongoDB connection
 mongoose
-	.connect(process.env.MONGO_URI || "mongodb://localhost:27017/resume_db")
+	.connect(process.env.MONGO_URI)
 	.then(() => console.log("✅ MongoDB Connected"))
 	.catch((err) => console.error("❌ MongoDB Error:", err.message));
 
