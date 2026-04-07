@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:5000/api/auth";
+const API_BASE = `${import.meta.env.VITE_API_URL}/api/auth`;
 
 const Login_page = () => {
 	const [isLogin, setIsLogin] = useState(true);

@@ -97,7 +97,7 @@ const LearningPath = () => {
 				return;
 			}
 			try {
-				const res = await fetch("http://localhost:5000/api/content/learning-path", {
+				const res = await fetch(`${import.meta.env.VITE_API_URL}/api/content/learning-path`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				if (res.status === 404) { setNoResume(true); setLoading(false); return; }

@@ -74,7 +74,7 @@ const CareerPath = () => {
 			}
 			try {
 				const res = await fetch(
-					"http://localhost:5000/api/content/career-path",
+					`${import.meta.env.VITE_API_URL}/api/content/career-path`,
 					{
 						headers: { Authorization: `Bearer ${token}` },
 					},

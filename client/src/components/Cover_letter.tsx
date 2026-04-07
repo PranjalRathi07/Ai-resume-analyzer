@@ -61,7 +61,7 @@ const CoverLetter = () => {
 			const hasLocalAnalysis = localStorage.getItem("resumeAnalysis");
 			if (!token || !hasLocalAnalysis) { setNoResume(true); setLoading(false); return; }
 			try {
-				const res = await fetch("http://localhost:5000/api/content/cover-letter", {
+				const res = await fetch(`${import.meta.env.VITE_API_URL}/api/content/cover-letter`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				if (res.status === 404) { setNoResume(true); setLoading(false); return; }
