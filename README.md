@@ -1,5 +1,5 @@
 # 🚀 AI-Powered Resume & Career Path Analyzer
-https://ai-resume-analyzer-mi3a-dezq3w1xd.vercel.app/
+https://ai-resume-analyzer-jgqj.vercel.app/
 
 An intelligent web application that analyzes resumes and provides personalized career guidance using AI.
 
