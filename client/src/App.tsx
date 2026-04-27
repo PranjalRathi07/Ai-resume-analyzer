@@ -8,7 +8,6 @@ import CareerPath from "./components/Career-path";
 import LearningPath from "./components/Learning_path";
 import LoginPage from "./components/Login_page";
 import CoverLetter from "./components/Cover_letter";
-import "./App.css";
 
 function App() {
 	return (
